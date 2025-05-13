@@ -16,8 +16,11 @@ struct PaymentView: View {
     @State private var adultCount = 1
     @State private var childCount  = 0
     @State private var selectedExtras: Set<Int> = []
+    @EnvironmentObject private var vm: RusTourViewModel
+    @Environment(\.dismiss) private var dismiss
+    @State private var isSubmitting   = false
+    @State private var showingSuccess = false
 
-    // удобный массив дат‑строк
     private var startDates: [Date] {
         tour.availableDates?.map(\.date).sorted() ?? []
     }
@@ -40,10 +43,8 @@ struct PaymentView: View {
     // MARK: – Body
     var body: some View {
         Form {
-            // ── header ──────────────────────────────────────
             headerSection
 
-            // ── choose date (только доступные) ─────────────
             Section("Дата начала") {
                 Picker("Дата", selection: $selectedDate) {
                     ForEach(startDates, id: \.self) { d in
@@ -53,7 +54,6 @@ struct PaymentView: View {
                 }
             }
 
-            // показываем рассчитанную дату окончания
             Section {
                 HStack {
                     Text("Дата окончания:")
@@ -63,7 +63,6 @@ struct PaymentView: View {
                 }
             }
 
-            // ── Room type ──────────────────────────────────
             if let rooms = tour.rooms, !rooms.isEmpty {
                 Section("Тип номера") {
                     Picker("Номер", selection: $selectedRoomIndex) {
@@ -75,13 +74,11 @@ struct PaymentView: View {
                 }
             }
 
-            // ── Guests ─────────────────────────────────────
             Section("Гости") {
                 Stepper("Взрослые: \(adultCount)", value: $adultCount, in: 1...10)
                 Stepper("Дети: \(childCount)",    value: $childCount, in: 0...10)
             }
 
-            // ── Extras ─────────────────────────────────────
             if let services = tour.services, !services.isEmpty {
                 Section("Дополнительные услуги") {
                     ForEach(services) { svc in
@@ -96,7 +93,6 @@ struct PaymentView: View {
                 }
             }
 
-            // ── Footer: total + pay ────────────────────────
             paySection
         }
         .navigationTitle("Оплата")

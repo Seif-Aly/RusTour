@@ -13,6 +13,7 @@ struct RusTourApp: App {
     @StateObject var auth = AuthManager.shared
     @StateObject var travelViewModel = RusTourViewModel()
     @StateObject var notif = NotificationManager.shared
+    @StateObject var vm = RusTourViewModel()
 
     var body: some Scene {
         WindowGroup {

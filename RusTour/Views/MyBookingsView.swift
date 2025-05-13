@@ -13,14 +13,8 @@ struct MyBookingsView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            // ─── Custom Top Bar ──────────────────────────
             HStack {
-                Button {
-                    dismiss()
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                        dismiss()
-                    }
-                } label: {
+                Button(action: { dismiss() }) {
                     Image(systemName: "chevron.left")
                         .font(.title3.weight(.semibold))
                         .padding(8)
@@ -33,11 +27,9 @@ struct MyBookingsView: View {
             }
             .padding()
 
-            // ─── Content ─────────────────────────────────
             if vm.myBookings.isEmpty {
                 Spacer()
                 ProgressView()
-                    .task { await vm.loadMyBookings() }
                 Spacer()
             } else {
                 List(vm.myBookings) { booking in
@@ -53,8 +45,7 @@ struct MyBookingsView: View {
                         .cornerRadius(8)
 
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(booking.tour.title)
-                                .bold()
+                            Text(booking.tour.title).bold()
                             Text(booking.bookingDate, format: .dateTime.day().month().year())
                                 .font(.subheadline)
                                 .foregroundColor(.gray)
@@ -66,12 +57,7 @@ struct MyBookingsView: View {
             }
         }
         .navigationBarBackButtonHidden(true)
-    }
-}
 
-struct MyBookingsView_Previews: PreviewProvider {
-    static var previews: some View {
-        MyBookingsView()
-            .environmentObject(RusTourViewModel())
+        .task { await vm.loadMyBookings() }
     }
 }

@@ -16,6 +16,12 @@ struct User: Codable {
     var role: String
 }
 
+struct UpdateUserRequest: Codable {
+    let firstName: String
+    let lastName: String
+    let email: String
+}
+
 final class AuthManager: ObservableObject {
     static let shared = AuthManager()
     private init() {
@@ -179,16 +185,15 @@ final class AuthManager: ObservableObject {
 
         let (data, response) = try await URLSession.shared.data(for: req)
         guard let http = response as? HTTPURLResponse else {
-            throw NSError(domain: "", code: -1, userInfo: nil)
+            throw URLError(.badServerResponse)
         }
         if !(200...299).contains(http.statusCode) {
-            let serverMsg = String(data: data, encoding: .utf8) ?? "No message"
-            throw NSError(domain: "",
-                          code: http.statusCode,
+            let serverMsg = String(data: data, encoding: .utf8) ?? "No response body"
+            throw NSError(domain: "", code: http.statusCode,
                           userInfo: [NSLocalizedDescriptionKey: serverMsg])
         }
 
-        self.currentUser = updated
+        await loadCurrentUser()
     }
 
     // MARK: - Token Persistence
