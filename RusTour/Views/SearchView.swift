@@ -14,11 +14,23 @@ struct SearchView: View {
     @State private var cityName: String = "";
     @State private var numberOfAdults: Int = 1;
     @State private var numberOfRooms: Int = 1;
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>;
     
     var body: some View {
+        VStack {
+            Button {
+                self.presentationMode.wrappedValue.dismiss()
+            } label: {
+                BackButtonLabel()
+            }
+        }
+        .padding(.top, 20)
+        .padding(.horizontal, 16)
+        .padding(.bottom, 16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         VStack(spacing: 0) {
             HStack {
-                Text("Search Hotels")
+                Text("Поиск туров")
                     .bold()
                     .font(.title2)
                 
@@ -34,7 +46,7 @@ struct SearchView: View {
             .padding(.bottom, 54)
             .frame(maxWidth: .infinity)
             
-            Text("City / Hotels")
+            Text("Город")
                 .padding(.leading, 16)
                 .padding(.bottom, 12)
                 .foregroundColor(Color("accent").opacity(0.6))
@@ -47,7 +59,7 @@ struct SearchView: View {
                     .frame(width: 22, height: 22)
                     .foregroundColor(Color("accent"))
                 
-                TextField("Enter city name", text: $cityName)
+                TextField("Введите название города", text: $cityName)
                     .frame(maxWidth: .infinity)
             }
             .padding(.horizontal, 18)
@@ -61,7 +73,7 @@ struct SearchView: View {
             
             HStack(spacing: 0) {
                 VStack(spacing: 0) {
-                    Text("Check-in")
+                    Text("Дата начала")
                         .padding(.leading, 16)
                         .padding(.bottom, 2)
                         .foregroundColor(Color("accent").opacity(0.6))
@@ -96,7 +108,7 @@ struct SearchView: View {
                 Spacer()
                 
                 VStack(spacing: 0) {
-                    Text("Check-out")
+                    Text("Дата окончания")
                         .padding(.leading, 16)
                         .padding(.bottom, 2)
                         .foregroundColor(Color("accent").opacity(0.6))
@@ -134,7 +146,7 @@ struct SearchView: View {
             
             HStack(alignment: .top, spacing: 0) {
                 VStack(spacing: 0) {
-                    Text("Guest Details")
+                    Text("Детали гостей")
                         .padding(.leading, 16)
                         .padding(.bottom, 12)
                         .foregroundColor(Color("accent").opacity(0.6))
@@ -146,7 +158,7 @@ struct SearchView: View {
                             Button {
                                 numberOfAdults = item
                             } label: {
-                                Text("\(item == 1 ? "1 adult" : "\(item) adults")")
+                                Text("\(item == 1 ? "1 Взрослый" : "\(item) Взрослые")")
                             }
                         }
                     } label: {
@@ -157,7 +169,7 @@ struct SearchView: View {
                                 .foregroundColor(Color("accent"))
                                 .frame(width: 22, height: 22)
                             
-                            Text("\(numberOfAdults == 1 ? "1 adult" : "\(numberOfAdults) adults")")
+                            Text("\(numberOfAdults == 1 ? "1 Взрослый" : "\(numberOfAdults) Взрослые")")
                                 .foregroundColor(.primary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
@@ -172,7 +184,7 @@ struct SearchView: View {
                 }
                 
                 VStack(spacing: 0) {
-                    Text("Room")
+                    Text("Комната")
                         .padding(.leading, 16)
                         .padding(.bottom, 12)
                         .foregroundColor(Color("accent").opacity(0.6))
@@ -223,9 +235,15 @@ struct SearchView: View {
             VStack {
                 
                 NavigationLink {
-                    SearchResultsView()
+                    SearchResultsView(criteria: TourSearchRequest(
+                        city: cityName.isEmpty ? nil : cityName,
+                        fromDate:   isoDate(checkInDate),
+                        toDate:  isoDate(checkOutDate),
+                        adults:        numberOfAdults,
+                        rooms:         numberOfRooms
+                    ))
                 } label: {
-                    ButtonLabel(isDisabled: false, label: "Search")
+                    ButtonLabel(isDisabled: false, label: "Поиск")
                 }
 
             }
@@ -249,6 +267,12 @@ struct NoHitTesting: ViewModifier {
     func body(content: Content) -> some View {
         SwiftUIWrapper { content }.allowsHitTesting(false)
     }
+}
+
+private func isoDate(_ date: Date) -> String {
+    let df = DateFormatter()
+    df.dateFormat = "yyyy-MM-dd"
+    return df.string(from: date)
 }
 
 extension View {

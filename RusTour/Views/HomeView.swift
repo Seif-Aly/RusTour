@@ -7,37 +7,22 @@
 
 import SwiftUI
 
-struct Category: Identifiable {
-    var id = UUID()
-    var label: String
-    var value: Int
-    var image: String
-}
-
 struct HomeView: View {
-    @State private var selectedCity: String = "All"
+    @State private var selectedCity: String = "Все"
     @Environment(\.colorScheme) private var colorScheme
     @EnvironmentObject private var viewModel: RusTourViewModel
     @Namespace private var animation
 
-    private let categories: [Category] = [
-        .init(label: "Trips",     value: 0, image: "category_trips"),
-        .init(label: "Hotel",     value: 1, image: "category_hotel"),
-        .init(label: "Transport", value: 2, image: "category_transport"),
-        .init(label: "Events",    value: 3, image: "category_events"),
-    ]
-
-    private var categorySize: CGFloat { ((UIScreen.main.bounds.width - 48) / 4) * 0.55 }
-    private var slideSize:    CGFloat { (UIScreen.main.bounds.width - 48) * 0.6 }
+    private var slideSize: CGFloat { (UIScreen.main.bounds.width - 48) * 0.6 }
 
     private var cityTabs: [String] {
         let cities = viewModel.tours.map { $0.city }
         let unique = Array(Set(cities)).sorted()
-        return ["All"] + unique
+        return ["Все"] + unique
     }
 
     private var filteredTours: [Tour] {
-        guard selectedCity != "All" else { return viewModel.tours }
+        guard selectedCity != "Все" else { return viewModel.tours }
         return viewModel.tours.filter { $0.city == selectedCity }
     }
 
@@ -47,25 +32,15 @@ struct HomeView: View {
 
                 // MARK: – Top Bar
                 HStack {
-                    Button { } label: {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Rectangle().frame(width: 22, height: 2.5).foregroundColor(.primary)
-                            Rectangle().frame(width: 16, height: 2.5).foregroundColor(.primary)
-                        }
-                    }
+                   
                     Spacer()
-                    Button { } label: {
-                        Image(systemName: "bell")
-                            .resizable().scaledToFit()
-                            .frame(width: 26, height: 26)
-                            .foregroundColor(.primary)
-                    }
+  
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
 
                 // MARK: – Title
-                Text("Where Do You\nWant To Go?")
+                Text("Куда вы\nхотите поехать?")
                     .font(.largeTitle).bold()
                     .foregroundColor(.primary)
                     .lineSpacing(10)
@@ -77,7 +52,7 @@ struct HomeView: View {
                 // MARK: – Search Bar
                 NavigationLink(destination: SearchView()) {
                     HStack {
-                        Text("Search your trip")
+                        Text("Найти тур")
                             .foregroundColor(colorScheme == .dark
                                              ? .white.opacity(0.5)
                                              : .black.opacity(0.5))
@@ -124,10 +99,23 @@ struct HomeView: View {
                     .padding(.horizontal, 24)
                 }
 
+                // MARK: – About Section
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("О нас")
+                        .font(.title3).bold()
+                        .padding(.top, 28)
+
+                    Text("RusTour — ваш надёжный партнёр в мире путешествий. Мы предлагаем уникальные туры, внимательный сервис и незабываемые впечатления.")
+                        .font(.body)
+                        .foregroundColor(.gray)
+                }
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
+
                 // MARK: – Tours Carousel
                 Group {
                     if viewModel.isLoading {
-                        ProgressView("Loading tours…")
+                        ProgressView("Загрузка туров…")
                             .frame(maxWidth: .infinity)
                             .padding()
                     } else if let error = viewModel.errorMessage {
@@ -149,34 +137,6 @@ struct HomeView: View {
                         }
                     }
                 }
-
-                // MARK: – Categories
-                Text("Popular Categories")
-                    .font(.headline).bold()
-                    .foregroundColor(.primary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.horizontal, 24)
-                    .padding(.top, 32)
-                    .padding(.bottom, 12)
-
-                HStack(spacing: categorySize * 0.5) {
-                    ForEach(categories) { category in
-                        Button {
-                            // category filter
-                        } label: {
-                            VStack {
-                                Image(category.image)
-                                    .resizable().scaledToFill()
-                                    .frame(width: categorySize, height: categorySize)
-                                Text(category.label)
-                                    .font(.subheadline)
-                                    .foregroundColor(Color("darkgrey"))
-                            }
-                        }
-                        .frame(maxWidth: .infinity)
-                    }
-                }
-                .padding(.horizontal, 24)
                 .padding(.bottom, 80)
             }
         }
@@ -215,7 +175,7 @@ struct HomeView: View {
                         .multilineTextAlignment(.leading)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
-                    Text("From $\(tour.pricePerAdult, format: .number.grouping(.never))")
+                    Text("От $\(tour.pricePerAdult, format: .number.grouping(.never))")
                         .font(.footnote)
                         .foregroundColor(.white)
                         .frame(maxWidth: .infinity, alignment: .leading)
@@ -231,15 +191,16 @@ struct HomeView: View {
 }
 
 // MARK: – Tour extension to extract a “city” from title
-private extension Tour {
+extension Tour {
     var city: String {
-        return title
+        let parts = title
             .components(separatedBy: CharacterSet(charactersIn: " ,–&"))
-            .first?
-            .trimmingCharacters(in: .whitespacesAndNewlines)
-            ?? country
+        return parts.first?
+               .trimmingCharacters(in: .whitespacesAndNewlines)
+               ?? country
     }
 }
+
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {

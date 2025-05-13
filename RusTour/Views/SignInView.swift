@@ -19,24 +19,24 @@ struct SignInView: View {
 
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            Text("Log In")
+            Text("Вход в аккаунт")
                 .bold()
                 .font(.largeTitle)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.top, 78)
             
             Spacer()
-            TextInput(value: $email, isPasswordVisible: .constant(true), isPasswordField: false, placeholder: "Enter Email")
-            TextInput(value: $password, isPasswordVisible: $isPasswordVisible, isPasswordField: true, placeholder: "Password")
+            TextInput(value: $email, isPasswordVisible: .constant(true), isPasswordField: false, placeholder: "Введите электронную почту")
+            TextInput(value: $password, isPasswordVisible: $isPasswordVisible, isPasswordField: true, placeholder: "Пароль")
 
-            NavigationLink {
-                ForgotPasswordView()
-            } label: {
-                Text("Forgot Password?")
-                    .foregroundColor(Color("green"))
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .bold()
-            }
+//            NavigationLink {
+//                ForgotPasswordView()
+//            } label: {
+//                Text("Forgot Password?")
+//                    .foregroundColor(Color("green"))
+//                    .frame(maxWidth: .infinity, alignment: .trailing)
+//                    .bold()
+//            }
 
             VStack {
                 NavigationLink(destination: MainView(), isActive: $isLoggedIn) {
@@ -44,17 +44,17 @@ struct SignInView: View {
                 }
 
                 Button(action: login) {
-                    ButtonLabel(isDisabled: false, label: "Login")
+                    ButtonLabel(isDisabled: false, label: "Войти")
                 }
                 .frame(maxWidth: .infinity)
             }
             .padding(.vertical, 18)
 
-            Text("Don't have an account?").padding(.vertical, 18)
+            Text("Нет аккаунта?").padding(.vertical, 18)
 
             NavigationLink(destination: SignUpView(didRegisterSuccessfully: $didRegister)) {
                 VStack {
-                    Text("REGISTER")
+                    Text("РЕГИСТРАЦИЯ")
                         .tracking(4)
                         .foregroundColor(Color("green"))
                         .padding(.bottom, 2)
@@ -70,7 +70,7 @@ struct SignInView: View {
         .navigationBarBackButtonHidden()
         .navigationBarHidden(true)
         .background(Color(.secondarySystemBackground))
-        .alert("Login Error", isPresented: $showingAlert) {
+        .alert("Ошибка входа", isPresented: $showingAlert) {
             Button("OK", role: .cancel) {
                 showingAlert = false
                 errorMessage = nil
@@ -82,7 +82,7 @@ struct SignInView: View {
 
     func login() {
         guard !email.isEmpty, !password.isEmpty else {
-            errorMessage = "Email and password cannot be empty"
+            errorMessage = "Электронная почта и пароль обязательны"
             showingAlert = true
             return
         }

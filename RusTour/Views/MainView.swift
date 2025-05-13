@@ -21,10 +21,10 @@ struct MainView: View {
     @EnvironmentObject var viewModel: RusTourViewModel;
     
     var screens: [Screen] = [
-        .init(label: "Home", icon_default: "home_default", icon_active: "home_active", tag: 0),
-        .init(label: "Explore", icon_default: "explore_default", icon_active: "explore_active", tag: 1),
-        .init(label: "Notifications", icon_default: "notifications_default", icon_active: "notifications_active", tag: 2),
-        .init(label: "Profile", icon_default: "profile_default", icon_active: "profile_active", tag: 3),
+        .init(label: "Главная", icon_default: "home_default", icon_active: "home_active", tag: 0),
+        .init(label: "Исследовать", icon_default: "explore_default", icon_active: "explore_active", tag: 1),
+        .init(label: "Уведомления", icon_default: "notifications_default", icon_active: "notifications_active", tag: 2),
+        .init(label: "Профиль", icon_default: "profile_default", icon_active: "profile_active", tag: 3),
     ]
     
     
@@ -38,8 +38,8 @@ struct MainView: View {
             TabView(selection: $activeScreen) {
                 HomeView()
                     .tag(0)
-//                ExploreView()
-//                    .tag(1)
+                ExploreView()
+                    .tag(1)
                 NotificationsView()
                     .tag(2)
                 ProfileView()
