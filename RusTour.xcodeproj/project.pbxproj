@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		30B65C632DE6DC7B000BA327 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 30B65C612DE6DC77000BA327 /* README.md */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		30EAAE0F2DD3B056003E1052 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		30B65C612DE6DC77000BA327 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		30EAADFC2DD3B052003E1052 /* RusTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RusTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30EAAE0E2DD3B056003E1052 /* RusTourTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RusTourTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		30EAAE182DD3B056003E1052 /* RusTourUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RusTourUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +84,7 @@
 				30EAAE112DD3B056003E1052 /* RusTourTests */,
 				30EAAE1B2DD3B056003E1052 /* RusTourUITests */,
 				30EAADFD2DD3B052003E1052 /* Products */,
+				30B65C612DE6DC77000BA327 /* README.md */,
 			);
 			sourceTree = "<group>";
 		};
@@ -212,6 +218,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				30B65C632DE6DC7B000BA327 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
